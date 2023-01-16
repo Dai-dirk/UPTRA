@@ -1,0 +1,3 @@
+/home/dy41/test/PTRA_ALAP/TTRAM_ALAP/TRAM-main/cgra-compiler/build/CMakeFiles/rebuild_cache.dir
+/home/dy41/test/PTRA_ALAP/TTRAM_ALAP/TRAM-main/cgra-compiler/build/CMakeFiles/cgra-compiler.dir
+/home/dy41/test/PTRA_ALAP/TTRAM_ALAP/TRAM-main/cgra-compiler/build/CMakeFiles/edit_cache.dir
