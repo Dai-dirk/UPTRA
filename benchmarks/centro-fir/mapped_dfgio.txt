@@ -1,0 +1,20 @@
+# format: DFG-IO-Name, ADG-IO-Index, DFG-IO-Latency
+# format: DFG-LOAD/STORE-Name, ADG-LSU-Index, DFG-LOAD/STORE-Latency
+N0, 24, 1
+N1, 36, 1
+N2, 48, 5
+N3, 31, 1
+N4, 43, 1
+N5, 43, 8
+N6, 31, 2
+N7, 55, 1
+N8, 36, 6
+N9, 48, 1
+N10, 36, 2
+N11, 43, 6
+N12, 19, 1
+N13, 24, 2
+N42, 60, 6
+N43, 55, 9
+N44, 31, 9
+N45, 55, 8
