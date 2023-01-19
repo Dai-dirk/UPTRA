@@ -611,17 +611,17 @@ bool Mapper::execute(bool dumpConfig, bool dumpMappedViz, std::string resultDir,
         if(dumpMappedViz){
             Graphviz viz(_mapping, dir);
             viz.drawDFG();
-            std::cout << "[TRAM] Draw mapped DFG successfully!" << std::endl;
+            std::cout << "[UPTRA] Draw mapped DFG successfully!" << std::endl;
             //@UPTRA TODO: draw mapped ADG according to II
             //viz.drawADG();
             viz.dumpDFGIO();
-            std::cout << "[TRAM] Dump mapped DFG IO message successfully!" << std::endl;
+            std::cout << "[UPTRA] Dump mapped DFG IO message successfully!" << std::endl;
         }
         if(dumpConfig){
             Configuration cfg(_mapping);
             std::ofstream ofs(dir + "/config.bit");
             cfg.dumpCfgData(ofs);
-            std::cout << "[TRAM] Dump config data successfully!" << std::endl;
+            std::cout << "[UPTRA] Dump config data successfully!" << std::endl;
         }
         std::cout << "Succeed to map DFG to ADG!<<<<<<\n" << std::endl;
     } else{
@@ -667,7 +667,7 @@ int Mapper::getRecMII( DFG* dfg){
   float RecMII = 0.0;
   float temp_RecMII = 0.0;
   std::list<std::list<DFGEdge*>*>* cycles = dfg->getCycles();
-  std::cout << "[TRAM] number of cycles: " << cycles->size() << std::endl;
+  std::cout << "[UPTRA] number of cycles: " << cycles->size() << std::endl;
   for( auto cycle: *cycles) {
     temp_RecMII = float(cycle->size()) / 1.0;
     if(temp_RecMII > RecMII)

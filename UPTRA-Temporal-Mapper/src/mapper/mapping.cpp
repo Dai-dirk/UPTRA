@@ -185,7 +185,7 @@ bool Mapping::mapDfgNode(DFGNode* dfgNode, ADGNode* adgNode, int mappingTime, bo
 
     for(auto mappedDFGNode: _t_adgNodeAttr[Time % II][adgNodeId].dfgNode){
         if(mappedDFGNode == dfgNode){
-            /*std::cout << "[TRAM] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
+            /*std::cout << "[UPTRA] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
             << mappingTime << " with II = " << II << std::endl;*/
             _dfgNodeAttr[dfgNodeId].mappedtime.emplace(mappingTime);
             if(isExecute && _t_adgNodeAttr[Time % II][adgNodeId].executeNode == nullptr){
@@ -319,7 +319,7 @@ bool Mapping::mapDfgNode(DFGNode* dfgNode, ADGNode* adgNode, int mappingTime, bo
     if(mappingTime + dfgNode->opLatency() > maxLat()){
         _maxLat = mappingTime + dfgNode->opLatency();
     }
-    /*std::cout << "[TRAM] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
+    /*std::cout << "[UPTRA] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
     << mappingTime << " with II = " << II << std::endl;*/
     return true;
 }
@@ -339,7 +339,7 @@ bool Mapping::mapDfgNode(DFGNode* dfgNode, ADGNode* adgNode, int mappingTime, bo
 
     for(auto mappedDFGNode: _t_adgNodeAttr[abs(mappingTime%II)][adgNode->id()].dfgNode){
         if(mappedDFGNode == dfgNode){
-            std::cout << "[TRAM] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
+            std::cout << "[UPTRA] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
             << mappingTime << " with II = " << II << std::endl;
             _dfgNodeAttr[dfgNode->id()].mappedtime.emplace(mappingTime);
             if(isExecute && _t_adgNodeAttr[abs(mappingTime%II)][adgNode->id()].executeNode == nullptr){
@@ -406,7 +406,7 @@ bool Mapping::mapDfgNode(DFGNode* dfgNode, ADGNode* adgNode, int mappingTime, bo
     _adgNodeUsageAttr[adgNode->id()] = adgusageattr;
     //@UPTRA: set the ADGNode is used and record the corresponding DFGNode
     //setOccupied(mappingTime, adgNode, dfgNode);
-    std::cout << "[TRAM] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
+    std::cout << "[UPTRA] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
     << mappingTime << " with II = " << II << std::endl;
     std::cout << "mapping 364 _numNodemapped: " << _numNodeMapped << std::endl;
     /*if(test == 1 ){
@@ -466,7 +466,7 @@ bool Mapping::mapOutDfgNode(DFGNode* dfgNode, ADGNode* adgNode, int mappingTime)
     /*ADGNodeUsageAttr adgusageattr;
     adgusageattr._currentConfigMem = adgusageattr._currentConfigMem + 1;
     _adgNodeUsageAttr[adgNode->id()] = adgusageattr;*/
-    /*std::cout << "[TRAM] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
+    /*std::cout << "[UPTRA] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
     << mappingTime << " with II = " << II << std::endl;*/
     if(mappingTime + dfgNode->opLatency()> maxLat()){
         _maxLat = mappingTime + dfgNode->opLatency();
@@ -507,7 +507,7 @@ bool Mapping::mapInDfgNode(DFGNode* dfgNode, ADGNode* adgNode, int mappingTime, 
     _dfgNodeAttr[dfgNodeId] = dfgAttr;
     _t_adgNodeAttr[mappingTime%II][adgNode->id()] = adgAttr;
     //@UPTRA: set the ADGNode is used and record the corresponding DFGNode
-    /*std::cout << "[TRAM] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
+    /*std::cout << "[UPTRA] set DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
     << mappingTime << " with II = " << II << std::endl;*/
     _numNodeMapped++;
     //std::cout << "mapping 311 _numNodemapped: " << _numNodeMapped << std::endl;
@@ -594,7 +594,7 @@ void Mapping::unuseADGNode(DFGNode* dfgNode, ADGNode* adgNode, int time){
     if(!_t_adgNodeAttr[Time % II].count(adgNode->id())|| std::find(_t_adgNodeAttr[Time % II][adgNode->id()].dfgNode.begin(),_t_adgNodeAttr[Time % II][adgNode->id()].dfgNode.end(), dfgNode) == _t_adgNodeAttr[Time % II][adgNode->id()].dfgNode.end() ){
         return;
     }
-     /*std::cout << "[TRAM] UNMAP DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
+     /*std::cout << "[UPTRA] UNMAP DFGNode " << dfgNode->name() << " at ADGNode " << adgNode->type() << "(" << adgNode->id() << ") at time: "\
     << time << " with II = " << II << std::endl;*/
     if(dfgNode->operation() == "INPUT" || dfgNode->operation() == "OUTPUT"){
        _t_adgNodeAttr[Time % II][adgNode->id()].dfgNode.erase(std::remove(_t_adgNodeAttr[Time % II][adgNode->id()].dfgNode.begin(), _t_adgNodeAttr[Time % II][adgNode->id()].dfgNode.end(), dfgNode), _t_adgNodeAttr[Time % II][adgNode->id()].dfgNode.end());
@@ -1457,7 +1457,7 @@ void Mapping::unrouteDfgEdge(DFGEdge* edge, bool isVio){
             _numNodeMapped--;
         }
     }
-    /*std::cout << "[TRAM] UNMAP DFGEdge " << edge->id() <<" at time: "\
+    /*std::cout << "[UPTRA] UNMAP DFGEdge " << edge->id() <<" at time: "\
     << edgeAttr.endTime << " with II = " << II << std::endl;*/
 }
 
@@ -2116,7 +2116,7 @@ int Mapping::tryFixVio(DFGNode* dfgNode, ADGNode* candidate, DFGEdge* edge, int 
     }
     //set DFGNode extrdelay
     //_dfgNodeAttr[beginNode->id()].extrDelay = cursrcExtrDelay;
-    /*std::cout << "[TRAM] try to go back to fix violation for " << dfgNode->name() << " at ADGNode " << candidate->type() << "(" << candidate->id() << ") "\
+    /*std::cout << "[UPTRA] try to go back to fix violation for " << dfgNode->name() << " at ADGNode " << candidate->type() << "(" << candidate->id() << ") "\
     << " with II = " << II << std::endl;*/
     while(!backNodes.empty()){// try to reroute the path
           DFGNode * nextNode = backNodes.top();

@@ -21,14 +21,14 @@ MapperSA::~MapperSA(){}
 // map the DFG to the ADG, mapper API
 bool MapperSA::mapper(bool spatial){
     bool succeed;
-    std::cout << "[TRAM] End of initialization, begin to PnR!" <<std::endl;
+    std::cout << "[UPTRA] End of initialization, begin to PnR!" <<std::endl;
     if(_objOpt){ // objective optimization
         succeed = pnrSyncOpt();
     }else{
         succeed = pnrSync(_maxIters, MAX_TEMP, false, spatial);
     }
     if(succeed){
-        std::cout << "[TRAM] PnR successfully with II = " << II << std::endl;
+        std::cout << "[UPTRA] PnR successfully with II = " << II << std::endl;
     }
     return succeed;
 }
@@ -64,7 +64,7 @@ bool MapperSA::pnrSyncOpt(){
             spdlog::debug("PnR and Data Synchronization failed!");
             continue;
         }
-        std::cout << "[TRAM] Start objective optimization! " << std::endl;
+        std::cout << "[UPTRA] Start objective optimization! " << std::endl;
         succeed = true;
         isOpt = true;
         spdlog::info("PnR and Data Synchronization succeed, start optimization");
@@ -124,19 +124,19 @@ bool MapperSA::pnrSync(int maxIters, int temp, bool isOpt, bool spatial){
     int test = 0;
     while(true){
         if(runningTimeMS() > getTimeOut()){
-            std::cout << "[TRAM] stop! Time out!" <<std::endl;
+            std::cout << "[UPTRA] stop! Time out!" <<std::endl;
             //_mapping->printAva();
             break;
         }
         iter += 1;
         if(iter > maxIters){
-            std::cout << "[TRAM] stop! Max iteration reach!" <<std::endl;
+            std::cout << "[UPTRA] stop! Max iteration reach!" <<std::endl;
             //_mapping->printAva();
             break;
         }
         // PnR without latency scheduling of DFG nodes
         if((curItersNosucced > (85 + 40 * (II - 1)) && !isOpt) && !spatial){ // if fail for some time, increase II
-            std::cout << "[TRAM] Current II:  " << II <<" increases to: "<< II + 1 << std::endl;
+            std::cout << "[UPTRA] Current II:  " << II <<" increases to: "<< II + 1 << std::endl;
             DFG* curDfg = curMapping->getDFG();
             delete curMapping;
             curMapping = new Mapping(adg, curDfg);
@@ -148,7 +148,7 @@ bool MapperSA::pnrSync(int maxIters, int temp, bool isOpt, bool spatial){
             *lastAcceptMapping = *curMapping; // can keep trying based on current status
         }
         if(II > adg->maxII()){
-            std::cout << "[TRAM] Warning! Current II exceeds the maximum supported II, the final config data may be uncorrect!" << std::endl;
+            std::cout << "[UPTRA] Warning! Current II exceeds the maximum supported II, the final config data may be uncorrect!" << std::endl;
         }
         //std::cout << "onece!!!\n " << std::endl;
         int status = pnr(curMapping, temp);
@@ -239,7 +239,7 @@ bool MapperSA::pnrSync(int maxIters, int temp, bool isOpt, bool spatial){
     if(succeed){
         spdlog::warn("Max latency: {}", _mapping->maxLat());
         if(!isOpt){
-            std::cout << "[TRAM] Before object-opt max latency: " << _mapping->maxLat() + 1<< std::endl; // time start from 0
+            std::cout << "[UPTRA] Before object-opt max latency: " << _mapping->maxLat() + 1<< std::endl; // time start from 0
         }
     }
     return succeed;
@@ -639,14 +639,14 @@ bool MapperSA::tryCandidate(Mapping* mapping, DFGNode* dfgNode, ADGNode* candida
                 int vioEdgeTime = edgeMapTime[edgeId];
                 int delay = latestTime - vioEdgeTime;      //actual delay usage
                 if(delay > maxDelay){// actual delay usage bigger than maxdelay, needs to go back the path to fix the violation
-                    //std::cout << "[TRAM] timing violation occur~~~ " << std::endl;
+                    //std::cout << "[UPTRA] timing violation occur~~~ " << std::endl;
                     int vio = delay - maxDelay;
                     int newTime;
                     newTime = mapping->tryFixVio(dfgNode, candidate, edge, latestTime);
                     edgeMapTime[edgeId] = newTime;     //after fixing, the edge that has violation need to refresh its end time
                     if(newTime == -1){
                         mapping->VioEdge(edgeId, vio);     //fail to fix, the edge still be the violated edge
-                        //std::cout << "[TRAM] fail to fix the violation! " << std::endl;
+                        //std::cout << "[UPTRA] fail to fix the violation! " << std::endl;
                         if(!edge->isCycle()){
                             isVio = true;
                             succeed = false;
@@ -681,12 +681,12 @@ bool MapperSA::tryCandidate(Mapping* mapping, DFGNode* dfgNode, ADGNode* candida
                                 routedEdges.erase(std::remove(routedEdges.begin(), routedEdges.end(), edge), routedEdges.end());
                                 continue;
                             }
-                            //std::cout << "[TRAM] After fixing still has violation! " << std::endl;
+                            //std::cout << "[UPTRA] After fixing still has violation! " << std::endl;
                             break;
                         }else{
                             allMappingTime.erase(vioEdgeTime);
                             allMappingTime.emplace(newTime);
-                            //std::cout << "[TRAM] Fix violation successful!  " << std::endl;
+                            //std::cout << "[UPTRA] Fix violation successful!  " << std::endl;
                         }
                     }
                 }else{
@@ -708,7 +708,7 @@ bool MapperSA::tryCandidate(Mapping* mapping, DFGNode* dfgNode, ADGNode* candida
                         mapping->VioEdge(edgeId, vio);
                         isVio = true;
                         succeed = false;
-                        //std::cout << "[TRAM] fail to fix the violation! " << std::endl;
+                        //std::cout << "[UPTRA] fail to fix the violation! " << std::endl;
                         break;
                     }else{
                         delay = abs(latestTime - newTime);  //after fixing the path, we will have new delay and violation
@@ -721,12 +721,12 @@ bool MapperSA::tryCandidate(Mapping* mapping, DFGNode* dfgNode, ADGNode* candida
                                     mapping->VioEdge(edgeTimes.first, vio);
                                 }
                             }
-                            //std::cout << "[TRAM] after fixing still has violation! " << std::endl;
+                            //std::cout << "[UPTRA] after fixing still has violation! " << std::endl;
                             break;
                         }else{
                             allMappingTime.erase(vioEdgeTime);
                             allMappingTime.emplace(newTime);
-                            //std::cout << "[TRAM] fix violation successful!  " << std::endl;
+                            //std::cout << "[UPTRA] fix violation successful!  " << std::endl;
                         }
                     }
                 }else{
@@ -846,13 +846,13 @@ bool MapperSA::tryCandidate(Mapping* mapping, DFGNode* dfgNode, ADGNode* candida
                     mapping->unmapDfgNode(outNode);
                     break;
                 }else{// has timing violation or outnode can not use so much delay unit, try to fix
-                    //std::cout << "[TRAM] timing violation occur~~~ " << std::endl;
+                    //std::cout << "[UPTRA] timing violation occur~~~ " << std::endl;
                     newTime = mapping->tryFixVio(outNode, adgNode, edge, outNodelatestTime + II);
                     if( newTime == -1){
                         mapping->VioEdge(edge->id(), vio);     //fail to fix, the edge still be the violated edge
                         //mapping->setVio(edge->id(), vio);
                         succeed = false;
-                        //std::cout << "[TRAM] fail to fix the violation! " << std::endl;
+                        //std::cout << "[UPTRA] fail to fix the violation! " << std::endl;
                         break;
                     }else{
                         newTime = newTime -II;
@@ -867,7 +867,7 @@ bool MapperSA::tryCandidate(Mapping* mapping, DFGNode* dfgNode, ADGNode* candida
                         if(vio > 0){ // after fixing still has timing violation
                             mapping->VioEdge(edge->id(), vio);     //fail to fix, the edge still be the violated edge
                             succeed = false;
-                            //std::cout << "[TRAM] after fixing still has violation! " << std::endl;
+                            //std::cout << "[UPTRA] after fixing still has violation! " << std::endl;
                             break;
                         }else{// has no timing violation, try to re-map the up-stream dfgNode
                             for(int t = newTime; t <= outNodelatestTime; t++){
@@ -889,7 +889,7 @@ bool MapperSA::tryCandidate(Mapping* mapping, DFGNode* dfgNode, ADGNode* candida
                                 mapping->setDelayuse(outNode, newDelayUsage);
                                 mapping->updateEndTime(edge, newTime);
                                 mapping->delVioEdge(edge->id());
-                                //std::cout << "[TRAM] fix violation successful!  " << std::endl;
+                                //std::cout << "[UPTRA] fix violation successful!  " << std::endl;
                         }
                     }
                 }
