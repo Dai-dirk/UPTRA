@@ -1,4 +1,4 @@
-////////////////////////UPTRA Temporal Mapper/////////////////////////
+///////////////////////UPTRA Temporal Mapper///////////////////////
 =======================
 
 Temporal CGRA mapping flow including scheduling, binding, configuration generation, and visualization.
@@ -35,7 +35,7 @@ Using the script run.sh
 
 
 #### Spatial computation
- For the UPTRA that only performs spatial computation, it needs to set the option -s as true. The spatial CGRA ADG file is at ../UPTRA_ARC/Spatial folder.
+ For the UPTRA that only performs spatial computation, it needs to set the option -s as true. The spatial CGRA ADG file is under ../UPTRA_ARC/Spatial folder.
 
 The generated result files are in the same dirrectory as the benchmark.
 
