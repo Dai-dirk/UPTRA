@@ -1,5 +1,6 @@
 # UPTRA
 UPTRA:  An Ultra-Parameterized Temporal CGRA Modeling and Optimization
+=======================
 
 UPTRA_ARC: The ADG files that used in the paper.
 
