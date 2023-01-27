@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
         if(!succeed){
             break;
         }
-        std::cout << "ALL II: ";
+        /*std::cout << "ALL II: ";
         for(auto elem : II){
             std::cout << elem << " "; 
         }
@@ -163,7 +163,7 @@ int main(int argc, char* argv[]) {
         for(auto elem : run_time){
             std::cout << elem << " "; 
         }
-        std::cout << " Average: " << ALL_time/10 << std::endl;
+        std::cout << " Average: " << ALL_time/10 << std::endl;*/
         numSucceed++;
     }
     
