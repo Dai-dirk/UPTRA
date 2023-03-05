@@ -191,6 +191,7 @@ private:
    int _endelay;
    std::vector<std::set<int>> _operandInputs; // indexes of input ports connected to each SRAM operand
    std::set<std::string> _operations; // supported operations
+   int _lsuid; // lsu-idx, start from 0
 public:
     using ADGNode::ADGNode; // C++11, inherit parent constructors
     int maxEnDelay(){ return _maxEnDelay; }
@@ -209,6 +210,8 @@ public:
     const std::set<std::string>& operations(){ return _operations; }
     int getOperandIdx(int inputIdx); // get which operand this input is connected
     virtual void print();
+    void setLSUid(int id) { _lsuid = id;}
+    int LSUid(){ return _lsuid;}
 };
 
 

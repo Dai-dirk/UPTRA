@@ -125,20 +125,5 @@
     "numOperands" : 3,
     "numRes" : 1,
     "OPC" : 17
-  }, {
-    "name" : "LOAD",
-    "commutative" : 0,
-    "latency" : 1,
-    "numOperands" : 2,
-    "numRes" : 1,
-    "OPC" : 18
-  }, {
-    "name" : "STORE",
-    "commutative" : 0,
-    "latency" : 1,
-    "numOperands" : 2,
-    "numRes" : 1,
-    "OPC" : 19
-  }
-  ]
+  } ]
 }

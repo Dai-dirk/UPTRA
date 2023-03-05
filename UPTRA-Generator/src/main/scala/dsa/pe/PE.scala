@@ -87,13 +87,7 @@ class GPE(attrs: mutable.Map[String, Any]) extends Module with IR {
   val imuxCfgWidthList = imuxs.map{ mux => mux.config.getWidth } // input Muxes
   val imuxCfgWidth = imuxCfgWidthList.sum 
   val sumCfgWidth = constCfgWidth + aluCfgWidth + rfCfgWidth + delayCfgWidth + imuxCfgWidth
-  val IIWidth = {
-    if (maxII == 1) {
-      1
-    } else {
-      log2Ceil(maxII)
-    }
-  }
+  val IIWidth = log2Ceil(maxII)
 
   val cfg = Module(new ConfigMem(sumCfgWidth, 1, cfgDataWidth, maxII))
   cfg.io.cfg_en := io.cfg_en && (cfgBlkIndex.U === io.cfg_addr(cfgAddrWidth-1, 2*IIWidth + cfgBlkOffset))

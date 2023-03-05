@@ -1062,6 +1062,8 @@ struct VisitNodeInfo{
                 if(dynamic_cast<GIBNode*>(nextNode)->outReged(nextDstPort)){
                  nextTime = curTime - 1;
                 }
+            }else if(nextNode->type() == "LSU"){
+                nextTime = curTime - 1;
             }
             if(nextTime < 0){
                 continue;

@@ -9,9 +9,9 @@
  // CGRA Specification
  object CGRASpec{
    val connect_flexibility = mutable.Map(
-     "num_itrack_per_ipin" -> 2, // ipin number = 3
-     "num_otrack_per_opin" -> 6, // opin number = 1
-     "num_ipin_per_opin"   -> 6
+     "num_perside_otrack_per_opin" -> 2,
+     "num_perside_itrack_per_ipin" -> 6,
+     "num_perside_ipin_per_opin"   -> 6
    )
    val pin_2_pin_connection = mutable.Map(
      "connect_2_side1" -> false,

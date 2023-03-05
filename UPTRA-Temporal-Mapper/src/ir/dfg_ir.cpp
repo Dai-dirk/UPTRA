@@ -305,6 +305,13 @@ DFG* DFGIR::parseDFGJson(std::string filename){
             dfg->addEdge(edge);
         }         
     }
+    // for(auto &elem : dfg->nodes()){
+    //     DFGNode* node = elem.second;
+    //     if(node->numInputs() < 2){
+    //         node->setImm(0);
+    //         node->setImmIdx(1);
+    //     }
+    // }
     return dfg;
 }
 

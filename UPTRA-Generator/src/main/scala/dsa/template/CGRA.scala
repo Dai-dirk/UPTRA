@@ -195,7 +195,6 @@ class CGRA(attrs: mutable.Map[String, Any], dumpIR: Boolean) extends Module with
       )
       smi_id("IB") += index
       smi_id_attrs += index -> smi_id_attr
-      println("IB x,y:"+x+","+y+","+index)
     }
   }
   sm_id("IB") += sm_id_offset
@@ -223,7 +222,6 @@ class CGRA(attrs: mutable.Map[String, Any], dumpIR: Boolean) extends Module with
       )
       smi_id("OB") += index
       smi_id_attrs += index -> smi_id_attr
-      println("OB x,y:"+x+","+y+","+index)
     }
   }
   sm_id("OB") += sm_id_offset
@@ -248,7 +246,6 @@ class CGRA(attrs: mutable.Map[String, Any], dumpIR: Boolean) extends Module with
       )
       smi_id("GPE") += index
       smi_id_attrs += index -> smi_id_attr
-      println("GPE x,y:"+x+","+y+","+index)
     }
   }
   sm_id("GPE") += sm_id_offset
@@ -346,7 +343,6 @@ class CGRA(attrs: mutable.Map[String, Any], dumpIR: Boolean) extends Module with
       )
       smi_id("GIB") += index
       smi_id_attrs += index -> smi_id_attr
-      println("GIB x,y:"+x+","+y+ " GIB i,j:"+i+","+j+","+index+ " " + num_iopin_list("opin_nw"))
     }
   }
   // LSU 2*(1,2,...,rows)+1 row
@@ -371,7 +367,6 @@ class CGRA(attrs: mutable.Map[String, Any], dumpIR: Boolean) extends Module with
       )
       smi_id("LSU") += index
       smi_id_attrs += index -> smi_id_attr
-      println("LSU x,y:"+x+","+y+","+index + "lsuid: " + lusid)
     }
   }
   sm_id("LSU") += sm_id_offset
@@ -608,8 +603,8 @@ class CGRA(attrs: mutable.Map[String, Any], dumpIR: Boolean) extends Module with
         lsus(i*2+j).io.out.zipWithIndex.map{ case (out, k) =>
         gibs(i*(cols+1)).io.opinSW(k) := out
         gibs((i+1)*(cols+1)).io.opinNW(k) := out
-        val index1 = gibs(i*(cols+1)+j+1).iPortMap("opinSW" + k.toString)
-        val index2 = gibs((i+1)*(cols+1)+j+1).iPortMap("opinNW" + k.toString)
+        val index1 = gibs(i*(cols+1)).iPortMap("opinSW" + k.toString)
+        val index2 = gibs((i+1)*(cols+1)).iPortMap("opinNW" + k.toString)
         connections.append((smi_id("LSU")(i*2+j), "LSU", k, smi_id("GIB")(i*(cols+1)), "GIB", index1))
         connections.append((smi_id("LSU")(i*2+j), "LSU", k, smi_id("GIB")((i+1)*(cols+1)), "GIB", index2))
       }

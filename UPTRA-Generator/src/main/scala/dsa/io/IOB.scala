@@ -36,13 +36,7 @@ class IOB(attrs: mutable.Map[String, Any]) extends Module with IR {
   val selWidth = log2Ceil(numIn) // width of the register selecting signal
   val sumCfgWidth = numOut*selWidth
   if(numIn > 1){
-    val IIWidth = {
-      if (maxII == 1) {
-        1
-      } else {
-        log2Ceil(maxII)
-      }
-    }
+    val IIWidth = log2Ceil(maxII)
     val muxs = Array.fill(numOut){Module(new Muxn(width, numIn)).io}    
     val cfg = Module(new ConfigMem(sumCfgWidth, 1, cfgDataWidth, maxII)) // configuration memory
     cfg.io.cfg_en := io.cfg_en && (cfgBlkIndex.U === io.cfg_addr(cfgAddrWidth-1, 2*IIWidth + cfgBlkOffset))

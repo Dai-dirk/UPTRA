@@ -179,6 +179,11 @@ ADGNode* ADGIR::parseADGNode(json& nodeJson, std::map<int, std::pair<ADGNode*, b
             bool trackReged = nodeJson["track_reged"].get<bool>();
             dynamic_cast<GIBNode*>(adg_node)->setTrackReged(trackReged);
         }
+        if(type == "LSU"){
+            int lsuindex = nodeJson["lsu_id"].get<int>();
+            dynamic_cast<LSUNode*>(adg_node)->setLSUid(lsuindex);
+            std::cout << "LSU Id: " << nodeId << "LSU_idx: " << lsuindex << std::endl;
+        }
         int cfgBlkIdx = nodeJson["cfg_blk_index"].get<int>();
         int x = nodeJson["x"].get<int>();
         int y = nodeJson["y"].get<int>();

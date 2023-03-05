@@ -110,19 +110,15 @@ object GIB{
         val index = (i*pinStep + j*fcStep).toInt
         if(pin2trackSel(0)){
           connect += Seq(NORTHWEST, i, NORTH, rule((NORTHWEST, NORTH))(Seq(index, w)))
-          println("NORTHWEST i:" + i + " NORTH:" + rule((NORTHWEST, NORTH))(Seq(index, w)))
         }
         if (pin2trackSel(1)) {
           connect += Seq(NORTHWEST, i, EAST, rule((NORTHWEST, EAST))(Seq(index, w)))
-          println("NORTHWEST i:" + i + " EAST:" + rule((NORTHWEST, EAST))(Seq(index, w)))
         }
         if (pin2trackSel(2)) {
           connect += Seq(NORTHWEST, i, SOUTH, rule((NORTHWEST, SOUTH))(Seq(index, w)))
-          println("NORTHWEST i:" + i + " SOUTH:" + rule((NORTHWEST, SOUTH))(Seq(index, w)))
         }
         if (pin2trackSel(3)) {
           connect += Seq(NORTHWEST, i, WEST, rule((NORTHWEST, WEST))(Seq(index, w)))
-          println("NORTHWEST i:" + i + " WEST:" + rule((NORTHWEST, WEST))(Seq(index, w)))
         }
       }      
     }
@@ -333,20 +329,14 @@ object GIB{
         if (nNEi > 0 && pin2pinSel(0)) {
           val iNE = (i * fcNEstep / nNWo + j * fcNEstep).toInt
           connect += Seq(NORTHWEST, i, NORTHEAST, rule((NORTHWEST, NORTHEAST))(Seq(iNE, nNEi)))
-          println("NORTHWEST i:" + i + " NORTHWEST:" + rule((NORTHWEST, NORTHEAST))(Seq(iNE, nNEi)))//@PTRA: nNEi can be treat as w
         }
         if(nSEi > 0 && pin2pinSel(1)){
           val iSE = (i*fcSEstep/nNWo + j*fcSEstep).toInt
           connect += Seq(NORTHWEST, i, SOUTHEAST, rule((NORTHWEST,SOUTHEAST))(Seq(iSE, nSEi)))
-//          println("diag pin 2 pin connection!!!!!!!!!!!!!!!")
-//          println("nNWo:" + nNWo + " nSEi:" + nSEi)
-         println("NORTHWEST i:" + i + " SOUTHEAST:" + rule((NORTHWEST,SOUTHEAST))(Seq(iSE, nSEi)))
-//          println("diag pin 2 pin connection!!!!!!!!!!!!!!!")
         }
         if(nSWi > 0 && pin2pinSel(2)){
           val iSW = (i*fcSWstep/nNWo + j*fcSWstep).toInt
           connect += Seq(NORTHWEST, i, SOUTHWEST, rule((NORTHWEST,SOUTHWEST))(Seq(iSW, nSWi)))
-          println("NORTHWEST i:" + i + " SOUTHWEST:" + rule((NORTHWEST,SOUTHWEST))(Seq(iSW, nSWi)))
         }
         /*println("pin 2 pin connection!!!!!!!!!!!!!!!")
         println("nNWo:" + nNWo + " nNEi:" + nNEi)
@@ -591,13 +581,7 @@ class GIB(attrs: mutable.Map[String, Any]) extends Module with IR {
    *     sorted by index
    */
   if(cfgsBit > 0) {
-    val IIWidth = {
-      if (maxII == 1) {
-        1
-      } else {
-        log2Ceil(maxII)
-      }
-    }
+    val IIWidth = log2Ceil(maxII)
     val cfg = Module(new ConfigMem(cfgsBit, 1, cfgDataWidth, maxII)) // configuration memory
     cfg.io.cfg_en := io.cfg_en && (cfgBlkIndex.U === io.cfg_addr(cfgAddrWidth-1, 2*IIWidth + cfgBlkOffset))
     cfg.io.cfg_addr := io.cfg_addr(2*IIWidth + cfgBlkOffset - 1, 2*IIWidth)

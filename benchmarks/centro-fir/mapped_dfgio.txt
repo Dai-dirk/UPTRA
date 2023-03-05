@@ -1,20 +1,22 @@
-# format: DFG-IO-Name, ADG-IO-Index, DFG-IO-Latency
-# format: DFG-LOAD/STORE-Name, ADG-LSU-Index, DFG-LOAD/STORE-Latency
-N0, 24, 1
-N1, 36, 1
-N2, 48, 5
-N3, 31, 1
-N4, 43, 1
-N5, 43, 8
-N6, 31, 2
-N7, 55, 1
-N8, 36, 6
-N9, 48, 1
-N10, 36, 2
-N11, 43, 6
-N12, 19, 1
-N13, 24, 2
-N42, 60, 6
-N43, 55, 9
-N44, 31, 9
-N45, 55, 8
+# Mapped II
+II 3
+# format: IOPort-ID, ADG-IO-Index, DFG-IO-Latency, DFG-IO-Name
+# format: LSPort-ID, ADG-LSU-Index, DFG-LOAD/STORE-Latency, DFG-LOAD/STORE-Name
+load_0, 7, 1, N0
+load_1, 5, 1, N1
+load_2, 0, 7, N2
+load_3, 2, 1, N3
+load_4, 4, 1, N4
+load_5, 2, 6, N5
+load_6, 6, 1, N6
+load_7, 3, 1, N7
+load_8, 0, 9, N8
+load_9, 1, 1, N9
+load_10, 1, 2, N10
+load_11, 4, 6, N11
+load_12, 5, 3, N12
+load_13, 3, 2, N13
+store_14, 7, 12, N42
+store_15, 5, 11, N43
+store_16, 6, 14, N44
+store_17, 1, 12, N45

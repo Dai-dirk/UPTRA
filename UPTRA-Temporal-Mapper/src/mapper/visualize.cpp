@@ -229,6 +229,42 @@ void Graphviz::printDFGEdgePath(){
 
 
 // dump mapped DFG IO ports with mapped ADG IO and latency annotated
+// void Graphviz::dumpDFGIO(){
+//     std::string filename = _dirname + "/mapped_dfgio.txt";
+//     std::ofstream ofs(filename);
+//     ADG* adg = _mapping->getADG();
+//     int adgId = adg->id();
+//     DFG* dfg = _mapping->getDFG();
+//     int dfgId = dfg->id();
+//     // if(assignIO){
+//     //     // assign DFG IO to ADG IO according to mapping result
+//     //     _mapping->assignDfgIO();
+//     // }
+//     ofs << "# format: DFG-IO-Name, ADG-IO-Index, DFG-IO-Latency\n";
+//     for(auto& elem : dfg->nodes()){
+//         if(elem.second->operation() != "INPUT" && elem.second->operation() != "OUTPUT"){
+//         continue;
+//         }
+//         std::string dfgIOname = elem.second->name();
+//         auto& attr =  _mapping->dfgNodeAttr(elem.second->id());
+//         int adgIOPort = attr.adgIOPort;
+//         ofs << dfgIOname << ", " << adgIOPort << ", " << _mapping->getLatest(elem.second->id()) + elem.second->opLatency() << std::endl;
+//     }
+//     ofs << "# format: DFG-LOAD/STORE-Name, ADG-LSU-Index, DFG-LOAD/STORE-Latency\n";
+//     for(auto& elem : dfg->nodes()){
+//         if(elem.second->operation() != "STORE" && elem.second->operation() != "LOAD"){
+//         continue;
+//         }
+//         //std::cout << "id and operation:"<< elem.first << "," << elem.second->operation() << std::endl;
+//     //std::string dfgLSUname = getDfgNodeName(dfgId, elem.first,false);
+//         std::string dfgLSUname = elem.second->name();
+//         //std::cout << "dfgLSUname:"<< _mapping->getLatest(elem.second->id()) << std::endl;
+//         auto& attr =  _mapping->dfgNodeAttr(elem.first);
+//         auto& adgLSU = attr.adgNode;
+//         int adgLSUId = adgLSU->id();
+//         ofs << dfgLSUname << ", " << adgLSUId << ", " << _mapping->getLatest(elem.second->id()) + elem.second->opLatency()<< std::endl;
+//     }
+// }
 void Graphviz::dumpDFGIO(){
     std::string filename = _dirname + "/mapped_dfgio.txt";
     std::ofstream ofs(filename);
@@ -236,32 +272,74 @@ void Graphviz::dumpDFGIO(){
     int adgId = adg->id();
     DFG* dfg = _mapping->getDFG();
     int dfgId = dfg->id();
+    int ioid = 0;
+    int lsid = 0;
+    char port[10];
     // if(assignIO){
     //     // assign DFG IO to ADG IO according to mapping result
     //     _mapping->assignDfgIO();
     // }
-    ofs << "# format: DFG-IO-Name, ADG-IO-Index, DFG-IO-Latency\n";
+    ofs << "# Mapped II\nII " << _mapping->getII() << std::endl;
+    ofs << "# format: IOPort-ID, ADG-IO-Index, DFG-IO-Latency, DFG-IO-Name\n";
     for(auto& elem : dfg->nodes()){
-        if(elem.second->operation() != "INPUT" && elem.second->operation() != "OUTPUT"){
-          continue;
+         if(elem.second->operation() != "INPUT" && elem.second->operation() != "OUTPUT"){
+             continue;
+         }
+         if(elem.second->operation() == "INPUT") {
+            std::string dfgIOname = elem.second->name();
+            //std::cout << "dfgLSUname:"<< dfgLSUname << std::endl;
+            auto& attr = _mapping->dfgNodeAttr(elem.second->id());
+            int adgIOPort = attr.adgIOPort;
+            // auto adgIOname = getAdgNodeName(adgId, adgIOPort);
+            sprintf(port,"%s%d","input_",ioid);
+            ioid++;
+            ofs << port << ", " << adgIOPort << ", " << _mapping->getLatest(elem.second->id()) + elem.second->opLatency() << ", " << dfgIOname << std::endl;
         }
-        std::string dfgIOname = elem.second->name();
-        auto& attr =  _mapping->dfgNodeAttr(elem.second->id());
-        int adgIOPort = attr.adgIOPort;
-        ofs << dfgIOname << ", " << adgIOPort << ", " << _mapping->getLatest(elem.second->id()) + elem.second->opLatency() << std::endl;
+        if(elem.second->operation() == "OUTPUT") {
+            std::string dfgIOname = elem.second->name();
+            //std::cout << "dfgLSUname:"<< dfgLSUname << std::endl;
+            auto& attr = _mapping->dfgNodeAttr(elem.second->id());
+            int adgIOPort = attr.adgIOPort;
+            // auto adgIOname = getAdgNodeName(adgId, adgIOPort, false);
+            sprintf(port,"%s%d","output_",ioid);
+            ioid++;
+            ofs << port << ", " << adgIOPort << ", " << _mapping->getLatest(elem.second->id()) + elem.second->opLatency() << ", " << dfgIOname << std::endl;
+        }
     }
-    ofs << "# format: DFG-LOAD/STORE-Name, ADG-LSU-Index, DFG-LOAD/STORE-Latency\n";
+    ofs << "# format: LSPort-ID, ADG-LSU-Index, DFG-LOAD/STORE-Latency, DFG-LOAD/STORE-Name\n";
     for(auto& elem : dfg->nodes()){
         if(elem.second->operation() != "STORE" && elem.second->operation() != "LOAD"){
           continue;
         }
-        //std::cout << "id and operation:"<< elem.first << "," << elem.second->operation() << std::endl;
-       //std::string dfgLSUname = getDfgNodeName(dfgId, elem.first,false);
+        if(elem.second->operation() == "STORE") {
         std::string dfgLSUname = elem.second->name();
-        //std::cout << "dfgLSUname:"<< _mapping->getLatest(elem.second->id()) << std::endl;
+        //std::cout << "dfgLSUname:"<< dfgLSUname << std::endl;
         auto& attr =  _mapping->dfgNodeAttr(elem.first);
         auto& adgLSU = attr.adgNode;
         int adgLSUId = adgLSU->id();
-        ofs << dfgLSUname << ", " << adgLSUId << ", " << _mapping->getLatest(elem.second->id()) + elem.second->opLatency()<< std::endl;
+        LSUNode * lsu = dynamic_cast<LSUNode*>(adgLSU);
+        int lsuindex = lsu->LSUid();
+        sprintf(port,"%s%d","store_",lsid);
+        lsid++;
+        //ofs << port << ", " << adgLSUId << ", " << lsuindex <<", " << _mapping->getLatest(elem.second->id()) + elem.second->opLatency() << ", " << dfgLSUname << std::endl;
+        ofs << port << ", " << lsuindex <<", " << _mapping->getLatest(elem.second->id()) + elem.second->opLatency() << ", " << dfgLSUname << std::endl;
+        }
+        if(elem.second->operation() == "LOAD") {
+        //std::cout << "id and operation:"<< elem.first << "," << elem.second->operation() << std::endl;
+        //std::string dfgLSUname = getDfgNodeName(dfgId, elem.first,false);
+        std::string dfgLSUname = elem.second->name();
+        //std::cout << "dfgLSUname:"<< dfgLSUname << std::endl;
+
+        auto& attr =  _mapping->dfgNodeAttr(elem.first);
+        auto& adgLSU = attr.adgNode;
+        int adgLSUId = adgLSU->id();
+        LSUNode * lsu = dynamic_cast<LSUNode*>(adgLSU);
+        int lsuindex = lsu->LSUid();
+        sprintf(port,"%s%d","load_",lsid);
+        lsid++;
+        ofs << port << ", " << lsuindex <<", "  << _mapping->getLatest(elem.second->id()) + elem.second->opLatency()<< ", " << dfgLSUname << std::endl;
+        }
+
     }
+    //ofs << "# Mapped II\nII " << _mapping->getII() << std::endl;
 }

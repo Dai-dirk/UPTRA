@@ -59,7 +59,7 @@ class ConfigMem(regWidth: Int, regNum: Int, cfgDataWidth: Int, maxII: Int) exten
     assert(cfgDataWidth % regWidth == 0)
   }
   val cfgAddrWidth = log2Ceil((regWidth * regNum + cfgDataWidth - 1) / cfgDataWidth)
-  val cycleWidth = II_Width
+  val cycleWidth = log2Ceil(maxII)
   val io = IO(new Bundle {
     val cfg_en = Input(Bool())
     val en = Input(Bool())
@@ -68,29 +68,20 @@ class ConfigMem(regWidth: Int, regNum: Int, cfgDataWidth: Int, maxII: Int) exten
     val cfg_addr = Input(UInt(cfgAddrWidth.W))
     val cfg_data = Input(UInt(cfgDataWidth.W))
     val out = Output(Vec(regNum, UInt(regWidth.W)))
-    val current_t = Output(UInt(II_Width.W))
+    val current_t = Output(UInt(log2Ceil(maxII).W))
   })
   //println("cfgAddrWidth: " + cfgAddrWidth)
   // configuration registers
   //val regs = RegInit(VecInit(Seq.fill(regNum){0.U(regWidth.W)}))
   /*val regs : Vec[UInt]= if(cfgDataWidth >= regWidth){
-    VecInit(Seq.fill(regNum){0.U(regWidth.W)}) //
+    VecInit(Seq.fill(regNum){0.U(regWidth.W)}) //存储某一个reg一个cycle的配置
   }else{
     RegInit(VecInit(Seq.fill(regNum){0.U(regWidth.W)}))
   }*/
   val configreg = RegInit(VecInit(Seq.fill(maxII){0.U(regWidth.W)}))
-  //val configreg = VecInit(Seq.fill(maxII){0.U(regWidth.W)}) //
+  //val configreg = VecInit(Seq.fill(maxII){0.U(regWidth.W)}) //存储某一个reg所有cycle的配置
   //val configmem = Wire(Vec(regNum,chiselTypeOf(configreg)))
   val configmem = new ArrayBuffer[Vec[UInt]]()
-
-  // II width
-  val II_Width = {
-    if(maxII == 1 ){
-      1
-    } else{
-      log2Ceil(maxII)
-    }
-  }
   /*val configmem = new ArrayBuffer[SyncReadMem[UInt]]()
   for(i <- 0 until regNum){
     val conmem = SyncReadMem(maxII,UInt(regWidth.W))
@@ -101,11 +92,11 @@ class ConfigMem(regWidth: Int, regNum: Int, cfgDataWidth: Int, maxII: Int) exten
   for(i <- 0 until maxII){
     configmem += configreg
   }
-  val config_pointer_i =RegInit(0.U(II_Width.W))
+  val config_pointer_i =RegInit(0.U(log2Ceil(maxII).W))
   val config_pointer =RegNext(config_pointer_i)
-  //regWidth
+  //regWidth是实际需要的配置位宽
   if(cfgDataWidth >= regWidth){
-    val regs = VecInit(Seq.fill(regNum){0.U(regWidth.W)}) //
+    val regs = VecInit(Seq.fill(regNum){0.U(regWidth.W)}) //存储某一个reg一个cycle的配置
     val step = cfgDataWidth / regWidth
     for(i <- 0 until regNum){
       when(io.cfg_en && (io.cfg_addr === (i/step).U)){

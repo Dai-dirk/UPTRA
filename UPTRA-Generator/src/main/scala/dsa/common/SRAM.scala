@@ -149,16 +149,8 @@ case class CPUInterface(addr_width:Int,data_width:Int,maxII:Int) extends Bundle{
   val write_data = Flipped(Decoupled(UInt(data_width.W)))
   //val write_data = Input(UInt(data_width.W))
 
-  // II width
-  val II_Width = {
-    if (maxII == 1) {
-      1
-    } else {
-      log2Ceil(maxII)
-    }
-  }
   //indicate which t-block writes to
-  val cycle = Input(UInt(II_Width.W))
+  val cycle = Input(UInt(log2Ceil(maxII).W))
 }
 
 

@@ -27,14 +27,6 @@ class LSU (attrs: mutable.Map[String, Any]) extends Module with IR {
   //@Yuan: configmem depth, maximum II supported
   val maxII = getAttrValue("max_II").asInstanceOf[Int]
 
-  // II width
-  val II_Width = {
-    if (maxII == 1) {
-      1
-    } else {
-      log2Ceil(maxII)
-    }
-  }
 
   //the total memory depth = mem_dep_percycle * maxII
   val all_mem_depth = mem_depth * maxII
@@ -53,10 +45,10 @@ class LSU (attrs: mutable.Map[String, Any]) extends Module with IR {
   val write_enable = Wire(Bool())
   val addr = Wire(UInt(log2Ceil(all_mem_depth).W))
   val Oprand = Wire(Vec(2,UInt(width.W)))
-  val opmode = Wire(UInt(cfgDataWidth.W))
+  val opmode = Wire(UInt(2.W))
   val const = Wire(UInt(width.W))
   // current cycle
-  val current_t = Wire(UInt(II_Width.W))
+  val current_t = Wire(UInt(log2Ceil(maxII).W))
 
   val muxs = Array.fill(2){Module(new Muxn(width, num_Perin+1)).io}
   val delay_pipes = Array.fill(2){ Module(new DelayPipe(width, maxDelay)).io }
@@ -107,18 +99,18 @@ class LSU (attrs: mutable.Map[String, Any]) extends Module with IR {
     write_enable := true.B
     addr := io.hostInterface.write_addr(log2Ceil(all_mem_depth) - 1, 0) + host_base_addr
   }.otherwise {
-    when(opmode === 0.U) {
+    when(opmode === 1.U) {
       chip_enable :=  io.en
       write_enable := !io.en
       addr := Oprand(0)(log2Ceil(all_mem_depth) - 1, 0) + cfg_base_addr
-    }.elsewhen(opmode === 1.U) {
+    }.elsewhen(opmode === 2.U) {
       chip_enable := io.en
       write_enable := io.en
       addr := Oprand(1)(log2Ceil(all_mem_depth) - 1, 0) + cfg_base_addr
     }.otherwise {
       chip_enable := false.B
       write_enable := false.B
-      addr := 0.U
+      addr := DontCare
     }
   }
 
@@ -127,9 +119,9 @@ class LSU (attrs: mutable.Map[String, Any]) extends Module with IR {
   val selWidth = log2Ceil(num_Perin+1)
   val delayCfgWidthEach = delay_pipes(0).config.getWidth // DelayPipe Config width
   val delayCfgWidth = 2 * delayCfgWidthEach
-  val sumCfgWidth = 1 + constCfgWidth + delayCfgWidth + selWidth*2
+  val sumCfgWidth = 2 + constCfgWidth + delayCfgWidth + selWidth*2
   //current cycle that cfg_data belongs to
-  val IIWidth = II_Width
+  val IIWidth = log2Ceil(maxII)
 
   val cfg = Module(new ConfigMem(sumCfgWidth, 1, cfgDataWidth, maxII)) // configuration memory
   cfg.io.cfg_en := io.cfg_en && (cfgBlkIndex.U === io.cfg_addr(cfgAddrWidth-1, 2*IIWidth + cfgBlkOffset))

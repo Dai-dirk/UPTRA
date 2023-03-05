@@ -31,9 +31,9 @@ std::map<int, CfgData> Configuration::getLsuCfgData(LSUNode* node, int time, int
     // operation
     int opc ;
     if(dfgNode->operation() == "LOAD"){
-        opc = 0;
-    }else{
         opc = 1;
+    }else{
+        opc = 2;
     }
     int sramId = -1;
     // bool flag = false;

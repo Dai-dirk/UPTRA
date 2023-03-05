@@ -45,14 +45,6 @@ N42 [ label = "O0", opcode=store];
 N43 [ label = "O1", opcode=store]; 
 N44 [ label = "O2", opcode=store]; 
 N45 [ label = "O3", opcode=store]; 
-N46 [ label = "O4", opcode=output]; 
-N47 [ label = "O5", opcode=output]; 
-N48 [ label = "O6", opcode=output]; 
-N49 [ label = "O7", opcode=output]; 
-N50 [ label = "O8", opcode=output]; 
-N51 [ label = "O9", opcode=output]; 
-N52 [ label = "O10", opcode=output]; 
-N53 [ label = "O11", opcode=output]; 
 const1[opcode=const, value=1];
 const2[opcode=const, value=1];
 const3[opcode=const, value=1];
@@ -149,14 +141,5 @@ N38 -> N42[ color=black, operand = 0  ];
 N39 -> N43[ color=black, operand = 0  ];
 N40 -> N44[ color=black, operand = 0  ];
 N41 -> N45[ color=black, operand = 0  ];
-N38 -> N46[ color=black, operand = 0  ];
-N39 -> N47[ color=black, operand = 0  ];
-N40 -> N48[ color=black, operand = 0  ];
-N41 -> N49[ color=black, operand = 0  ];
-N14 -> N50[ color=black, operand = 0  ];
-N15 -> N51[ color=black, operand = 0  ];
-N16 -> N52[ color=black, operand = 0  ];
-N17 -> N53[ color=black, operand = 0  ];
-
 
 }

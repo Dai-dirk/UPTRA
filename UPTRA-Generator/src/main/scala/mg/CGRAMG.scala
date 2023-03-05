@@ -13,10 +13,10 @@ import dsa._
 //  genVerilog: Boolean = true,
 //)
 
-// Temporal CGRA Modeling and Generation
+// CGRA Modeling and Generation
 object CGRAMG extends App{
   var loadSpec : Boolean = true
-  var dumpOperations : Boolean = true
+  var dumpOperations : Boolean = false
   var dumpIR : Boolean = true
   var genVerilog : Boolean = true
 
