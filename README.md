@@ -16,7 +16,7 @@ Parameters_Descriptions: The detailed descriptions of the 29 parameters.
 
 
 
-/************************************ CITATIONS********************************/
+/************************************ Publications********************************/
 
 @INPROCEEDINGS{UPTRA,
 
