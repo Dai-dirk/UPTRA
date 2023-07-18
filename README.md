@@ -17,7 +17,9 @@ Parameters_Descriptions: The detailed descriptions of the 29 parameters.
 
 
 /************************************ CITATIONS********************************/
+
 @INPROCEEDINGS{uptra,
+
   author={Dai, Yuan and Qiu, Yunhui and Zhu, Qilong and Li, Jingyuan and Yin, Wenbo and Wang, Lingli},
   booktitle={2023 IEEE 31st Annual International Symposium on Field-Programmable Custom Computing Machines (FCCM)}, 
   title={UPTRA: An Ultra-Parameterized Temporal CGRA Modeling and Optimization}, 
